@@ -3,19 +3,22 @@ const vendorAuthenticate = require("../middleware/vendorProtected");
 const app = express();
 const router = express.Router();
 const { Category } = require("../models/Category");
-const { Item, itemImgUpload } = require("../models/item");
+const { Item } = require("../models/item");
 // const { ContactToVendor } = require("../models/Contact").ContactToVendor;
 const { Vendor, upload } = require("../models/Vendor");
-const cloudinary = require("cloudinary").v2;
-const {
-  StepContext,
-} = require("twilio/lib/rest/studio/v1/flow/engagement/step");
 
+const cloudinary = require("cloudinary").v2; // for cloudinary use
+
+// Configuration of cloudinary
 cloudinary.config({
   cloud_name: "dwceepc2n",
   api_key: "454337413752854",
   api_secret: "c-Rp6Uu8LMBwTSWiVdtnS02--AU",
 });
+
+const {
+  StepContext,
+} = require("twilio/lib/rest/studio/v1/flow/engagement/step");
 
 router.post(
   "/signup",
@@ -124,7 +127,6 @@ router.post(
 router.post(
   "/item/new",
   vendorAuthenticate,
-  itemImgUpload.single("image"),
   require("../controller/vendorDashboard").item
 );
 
@@ -150,6 +152,27 @@ router.post(
   "/category/delete/:id",
   vendorAuthenticate,
   require("../controller/vendorDashboard").deletecategory
+);
+
+// router.post("/addimage", vendorAuthenticate, (req, res) => {
+//   const file = req.files.image;
+//   cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
+//     if (err) {
+//       return res.status(400).json({
+//         err,
+//       });
+//     }
+//     res.json({
+//       public_id: result.public_id,
+//       url: result.secure_url,
+//     });
+//   });
+// });
+
+router.post(
+  "/addimage",
+  vendorAuthenticate,
+  require("../controller/vendorDashboard").addimage
 );
 
 router.post("/");

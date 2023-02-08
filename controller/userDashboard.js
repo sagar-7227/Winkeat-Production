@@ -66,6 +66,7 @@ const addtocart = async (req, res, next) => {
     return res.status(401).send({ message: "error" });
   }
 };
+
 const getcart = async (req, res, next) => {
   try {
     const cart = await Cart.findOne({
